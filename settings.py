@@ -14,7 +14,7 @@ player_x, player_y = width // 2, height // 2
 player_size = 20
 
 # Velocidad del jugador
-velocity = 0.25
+velocity = 5
 
 # Carga de imágenes
 player_image = pygame.image.load('player.png')
@@ -26,5 +26,9 @@ tile_size = 80
 chunk_pixel_size = chunk_size * tile_size
 
 # Variables para controlar la cantidad de chunks
-chunks_horizontal = 12
-chunks_vertical = 12
+chunks_horizontal = 30
+chunks_vertical = 30
+
+# En settings.py
+map_width = chunks_horizontal * chunk_size * tile_size
+map_height = chunks_vertical * chunk_size * tile_size
