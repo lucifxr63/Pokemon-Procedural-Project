@@ -2,50 +2,12 @@ import pygame
 import sys
 import random
 
+from settings import width, height, screen, WHITE, BLACK,player_x,player_y, player_size, velocity, player_image,chunk_size,tile_size,chunk_pixel_size,chunks_horizontal,chunks_vertical
+from map_generador import create_initial_map,chunk_types,is_valid_position
+
 # Inicialización de Pygame
 pygame.init()
-
-# Dimensiones de la ventana
-width, height = 640, 480
-screen = pygame.display.set_mode((width, height))
-
-# Colores
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)  # Color para las líneas de separación de chunks
-
-# Posición del jugador
-player_x, player_y = width // 2, height // 2
-player_size = 20
-
-# Velocidad del jugador
-velocity = 5
-
-# Carga de imágenes
-player_image = pygame.image.load('player.png')
-player_image = pygame.transform.scale(player_image, (player_size, player_size))
-
-# Dimensiones del chunk (por ejemplo, cada 4x4 tiles)
-chunk_size = 4
-tile_size = 80
-chunk_pixel_size = chunk_size * tile_size
-
-# Variables para controlar la cantidad de chunks
-chunks_horizontal = 5
-chunks_vertical = 3
-
-# Función para crear un mapa inicial
-def create_initial_map():
-    map_colors = [[(random.randint(100, 255), 0, 0) for _ in range(chunks_horizontal)] for _ in range(chunks_vertical)]
-    game_map = []
-    for y in range(chunks_vertical * chunk_size):
-        row = []
-        for x in range(chunks_horizontal * chunk_size):
-            chunk_x = x // chunk_size
-            chunk_y = y // chunk_size
-            row.append(map_colors[chunk_y][chunk_x])
-        game_map.append(row)
-    return game_map
-
+# se crea el mapa inicial 
 game_map = create_initial_map()
 
 # Desplazamientos del mapa
@@ -65,24 +27,45 @@ def draw_map(horizontal_offset, vertical_offset):
 
 def add_tiles(direction):
     global game_map, chunks_horizontal, chunks_vertical, horizontal_offset, vertical_offset
+    new_chunks = []
+    
+    # Función para agregar un nuevo chunk respetando las reglas
+    def add_new_chunk(x, y):
+        # Elegir un tipo de chunk válido
+        while True:
+            chosen_type = random.choice(list(chunk_types.keys()))
+            if is_valid_position(game_map, x, y, chosen_type):
+                return chunk_types[chosen_type]
+    
     if direction == 'right':
+        # Agregar columnas a la derecha
         for _ in range(chunk_size):
-            for row in game_map:
-                row.append((random.randint(100, 255), 0, 0))
-        chunks_horizontal += 1
+            for row_index, row in enumerate(game_map):
+                new_color = add_new_chunk(len(row), row_index // chunk_size)
+                row.append(new_color)
+        
+        
     elif direction == 'left':
-        for _ in range(chunk_size):
-            for row in game_map:
-                row.insert(0, (random.randint(100, 255), 0, 0))
+        # Agregar columnas a la izquierda
         horizontal_offset += chunk_pixel_size  # Ajuste para mantener el punto de vista
+        for _ in range(chunk_size):
+            for row_index, row in enumerate(game_map):
+                new_color = add_new_chunk(0, row_index // chunk_size)
+                row.insert(0, new_color)
+            chunks_horizontal += 1
+        
     elif direction == 'up':
-        for _ in range(chunk_size):
-            new_row = [(random.randint(100, 255), 0, 0) for _ in range(chunks_horizontal * chunk_size)]
-            game_map.insert(0, new_row)
+        # Agregar filas arriba
         vertical_offset += chunk_pixel_size  # Ajuste para mantener el punto de vista
-    elif direction == 'down':
         for _ in range(chunk_size):
-            new_row = [(random.randint(100, 255), 0, 0) for _ in range(chunks_horizontal * chunk_size)]
+            new_row = [add_new_chunk(col_index, 0) for col_index in range(len(game_map[0]))]
+            game_map.insert(0, new_row)
+        chunks_vertical += 1
+        
+    elif direction == 'down':
+        # Agregar filas abajo
+        for _ in range(chunk_size):
+            new_row = [add_new_chunk(col_index, len(game_map)) for col_index in range(len(game_map[0]))]
             game_map.append(new_row)
         chunks_vertical += 1
 
