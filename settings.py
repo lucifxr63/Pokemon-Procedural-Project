@@ -32,3 +32,12 @@ chunks_vertical = 30
 # En settings.py
 map_width = chunks_horizontal * chunk_size * tile_size
 map_height = chunks_vertical * chunk_size * tile_size
+
+
+# Cargar imágenes para cada tipo de chunk
+chunk_images = {
+    "pueblo": pygame.transform.scale(pygame.image.load('pueblo.jpeg'), (chunk_pixel_size, chunk_pixel_size)),
+    "pradera": pygame.transform.scale(pygame.image.load('pradera.jpeg'), (chunk_pixel_size, chunk_pixel_size)),
+    "desierto": pygame.transform.scale(pygame.image.load('desierto.jpeg'), (chunk_pixel_size, chunk_pixel_size)),
+    "volcan": pygame.transform.scale(pygame.image.load('volcan.jpeg'), (chunk_pixel_size, chunk_pixel_size))
+}
