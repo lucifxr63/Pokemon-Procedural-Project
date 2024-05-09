@@ -1,5 +1,7 @@
 import pygame
 
+# Inicialización de Pygame
+pygame.init()
 
 # Dimensiones de la ventana
 width, height = 640, 480
@@ -14,21 +16,23 @@ player_x, player_y = width // 2, height // 2
 player_size = 20
 
 # Velocidad del jugador
-velocity = 5
+velocity = 2.5
 
 # Carga de imágenes
-player_image = pygame.image.load('player.png')
+player_image = pygame.image.load('./imagenes/player.png')
 player_image = pygame.transform.scale(player_image, (player_size, player_size))
 
 # Dimensiones del chunk (por ejemplo, cada 4x4 tiles)
 chunk_size = 4
 tile_size = 80
-chunk_pixel_size = chunk_size * tile_size
+chunk_pixel_size = chunk_size * tile_size  # Tamaño de un chunk en píxeles
 
 # Variables para controlar la cantidad de chunks
 chunks_horizontal = 30
 chunks_vertical = 30
 
-# En settings.py
+# Dimensiones totales del mapa en píxeles
 map_width = chunks_horizontal * chunk_size * tile_size
 map_height = chunks_vertical * chunk_size * tile_size
+
+# Ajustes adicionales podrían ser necesarios dependiendo de los detalles específicos del juego.
