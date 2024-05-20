@@ -7,6 +7,14 @@ pygame.init()
 width, height = 640, 480
 screen = pygame.display.set_mode((width, height))
 
+# Diccionario de tipos de chunks con imágenes cargadas y escaladas
+chunk_types = {
+    "pueblo": pygame.image.load('./imagenes/grasspueblo.jpg').convert_alpha(),
+    "pradera": pygame.image.load('./imagenes/praderabonita.jpg').convert_alpha(),
+    "desierto": pygame.image.load('./imagenes/desiertopixel.jpg').convert_alpha(),
+    "volcan": pygame.image.load('./imagenes/lava.jpg').convert_alpha()
+}
+
 # Colores
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)  # Color para las líneas de separación de chunks

@@ -1,12 +1,16 @@
 import pygame
 import sys
 import random
-
 from settings import width, height, screen, WHITE, player_x, player_y, player_size, velocity, player_image, chunk_size, tile_size, chunk_pixel_size, chunks_horizontal, chunks_vertical, map_width, map_height, bush_image, bush_fuego_image, bush_desierto_image, pueblo_image
 from map_generador import create_initial_map, chunk_types, valid_position
+from game_menu import show_menu
 
 # Inicialización de Pygame
 pygame.init()
+
+# Variable de estado inicial
+state = 'inicio'
+
 # Se crea el mapa inicial
 game_map = create_initial_map()
 
@@ -122,31 +126,34 @@ def add_tiles(direction):
 # Bucle principal del juego
 running = True
 while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    if state == 'inicio':
+        state = show_menu(screen, width, height)
+    elif state == 'game':
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-    keys = pygame.key.get_pressed()
-    player_x += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * velocity
-    player_y += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * velocity
+        keys = pygame.key.get_pressed()
+        player_x += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * velocity
+        player_y += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * velocity
 
-    player_x = max(0, min(player_x, width - player_size))
-    player_y = max(0, min(player_y, height - player_size))
+        player_x = max(0, min(player_x, width - player_size))
+        player_y = max(0, min(player_y, height - player_size))
 
-    if player_x == width - player_size and horizontal_offset < map_width - width:
-        horizontal_offset += velocity
-    elif player_x == 0 and horizontal_offset > 0:
-        horizontal_offset -= velocity
+        if player_x == width - player_size and horizontal_offset < map_width - width:
+            horizontal_offset += velocity
+        elif player_x == 0 and horizontal_offset > 0:
+            horizontal_offset -= velocity
 
-    if player_y == height - player_size and vertical_offset < map_height - height:
-        vertical_offset += velocity
-    elif player_y == 0 and vertical_offset > 0:
-        vertical_offset -= velocity
+        if player_y == height - player_size and vertical_offset < map_height - height:
+            vertical_offset += velocity
+        elif player_y == 0 and vertical_offset > 0:
+            vertical_offset -= velocity
 
-    screen.fill(WHITE)
-    draw_map(horizontal_offset, vertical_offset)
-    screen.blit(player_image, (player_x, player_y))
-    pygame.display.flip()
+        screen.fill(WHITE)
+        draw_map(horizontal_offset, vertical_offset)
+        screen.blit(player_image, (player_x, player_y))
+        pygame.display.flip()
 
 pygame.quit()
 sys.exit()
