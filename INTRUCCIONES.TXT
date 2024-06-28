@@ -1,0 +1,7 @@
+1.- ejecutar el juego
+2.- apretar nueva partida
+3.- ya en el mapa , apretar la letra S , esta guardara el mapa
+4.- cerrar el juego actual
+5.- volver a abrir el juego
+6.- ahora apretar el cargar juego
+7.- listo , esta es la nueva implementacion de poder guardar y cargar la ultima partida guardada!
